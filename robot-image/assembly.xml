@@ -1,0 +1,34 @@
+<assembly>
+	<id>release</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>bin</directory>
+			<outputDirectory>/</outputDirectory>
+			<fileMode>0740</fileMode>
+		</fileSet>
+		<fileSet>
+			<directory>obstacle-img</directory>
+			<outputDirectory>/img</outputDirectory>
+			<fileMode>0740</fileMode>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<excludes>
+				<exclude>META-INF/**</exclude>
+			</excludes>
+			<outputDirectory>/config</outputDirectory>
+			<fileMode>0640</fileMode>
+		</fileSet>
+		<fileSet>
+			<directory>target</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>robot-image-0.1.0.jar</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
