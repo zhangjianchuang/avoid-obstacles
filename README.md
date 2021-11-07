@@ -28,3 +28,4 @@ pip install opencv-contrib-python
 
 ### reference
 https://blog.csdn.net/hahabeibei123456789/article/details/101052958
+https://wizardforcel.gitbooks.io/py-ds-intro-tut/content/opencv.html
