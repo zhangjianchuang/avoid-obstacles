@@ -1,6 +1,6 @@
 #!/bin/bash
-APP_NAME=robot-image-0.1.0
 APP_KEY=robot-image
+APP_NAME=$APP_KEY-0.1.0
 APP_HOME=$(cd "$(dirname $0)"; pwd)
 APP_MAINCLASS=$APP_NAME.jar
 
