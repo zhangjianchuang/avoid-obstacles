@@ -23,6 +23,7 @@
     <properties>
         <java.version>1.8</java.version>
         <jpython.version>2.5.3</jpython.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
     </properties>
 
     <dependencyManagement>
@@ -31,6 +32,12 @@
                 <groupId>org.python</groupId>
                 <artifactId>jython</artifactId>
                 <version>${jpython.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
