@@ -1,5 +1,6 @@
-#!/usr/bin/env python
-import glob
+# -*- coding: utf-8 -*-
+# !/usr/bin/env python
+import os
 
 import cv2
 import numpy as np
@@ -12,6 +13,8 @@ class ObstacleSearcher:
         self.template = cv2.imread(templateUrl, 0)
 
     def search(self, imgUrl):
+        if not os.path.exists(imgUrl):
+            return False
         img_rgb = cv2.imread(imgUrl)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
@@ -27,7 +30,6 @@ class ObstacleSearcher:
         # cv2.imshow("image", img_rgb)
         # cv2.waitKey(0)
         return False
-
 
 # test
 # searcher = ObstacleSearcher("../../robot-image/obstacle-img/example.png")

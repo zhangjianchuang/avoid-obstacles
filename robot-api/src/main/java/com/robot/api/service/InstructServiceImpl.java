@@ -33,11 +33,7 @@ public class InstructServiceImpl implements InstructService {
             String toPath           = tmpImagePath +  fileName;
             uploadFile.transferTo(new File(toPath));
             String  url              = algorithmHost + "/algorithm/obstacle/recognition/exist/" + fileName;
-            Boolean isExistsObstacle = restTemplate.getForObject(url, Boolean.class);
-            if (isExistsObstacle != null && isExistsObstacle) {
-                return "l";
-            }
-            return "s";
+            return restTemplate.getForObject(url, String.class);
         } catch (IOException e) {
             throw new RuntimeException("文件上传失败");
         }

@@ -6,5 +6,5 @@ package com.robot.algorithm.service;
  */
 public interface ObstacleRecognitionService {
 
-    boolean hasObstacle(String image);
+    String hasObstacle(String image);
 }

@@ -1,7 +1,9 @@
 package com.robot.algorithm.service;
 
 import com.robot.algorithm.utils.HttpUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author zhangjianchuang@kanzhun.com
@@ -10,16 +12,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class ObstacleRecognitionServiceImpl implements ObstacleRecognitionService {
     private final String downloadImageHost = "localhost:20002/api/get/img/";
-    private final String saveTo            = "tmp/";
+    private final String saveTo = "script/tmp/";
+
+    private final String searcherHost = "localhost:20003/search/";
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
-    public boolean hasObstacle(String image) {
+    public String hasObstacle(String image) {
         String saveFile = saveTo + image;
-        boolean downResult       = HttpUtil.httpDownload(downloadImageHost + image, saveFile);
-        if(downResult){
+        boolean downResult = HttpUtil.httpDownload(downloadImageHost + image, saveFile);
+
+        if (downResult) {
             System.out.println("down success");
-            return true;
+            return restTemplate.getForObject(searcherHost + image, String.class);
         }
-        return false;
+        return "s";
     }
 }

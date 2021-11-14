@@ -18,7 +18,7 @@ public class ObstacleRecognitionController {
     private ObstacleRecognitionService service;
 
     @RequestMapping("/exist/{image}")
-    public Boolean exist(@PathVariable String image) {
+    public String exist(@PathVariable String image) {
         return service.hasObstacle(image);
     }
 }
