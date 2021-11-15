@@ -13,7 +13,6 @@ public class ObstaclesImageController {
 
     @RequestMapping("/begin/send")
     public String send() {
-        service.send();
-        return "ok";
+        return service.send();
     }
 }

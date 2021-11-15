@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
  * @date 2021年11月09日 10:07 上午
  */
 public class HttpUtil {
-    public static boolean upload(String url, File imageFilePath) {
+    public static String upload(String url, File imageFilePath) {
         HttpEntity reqEntity = MultipartEntityBuilder
                 .create()
                 .addPart("file", new FileBody(imageFilePath))
@@ -28,22 +28,21 @@ public class HttpUtil {
         httpPost.setEntity(reqEntity);
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(httpPost)) {
-            HttpEntity resultEntity = response.getEntity();
+            HttpEntity    resultEntity = response.getEntity();
+            StringBuilder sb           = new StringBuilder();
             if (resultEntity != null) {
                 try (InputStream is = resultEntity.getContent();
                      BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-                    StringBuilder sb = new StringBuilder();
-                    String        line;
+                    String line;
                     while ((line = br.readLine()) != null) {
                         sb.append(line);
                     }
-                    System.out.println("Parsing completed, parsing content: " + sb.toString());
                 }
             }
             EntityUtils.consume(resultEntity);
+            return sb.toString();
         } catch (Exception e) {
-            return false;
+            return "";
         }
-        return true;
     }
 }

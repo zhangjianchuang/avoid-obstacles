@@ -6,7 +6,7 @@ public interface InstructService {
 
     /**
      * 's' is Straight ahead
-     * 'l' is Turn left
+     * 't' is Turn
      *
      * @param uploadFile img file
      * @return java.lang.String

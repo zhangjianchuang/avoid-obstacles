@@ -7,5 +7,5 @@ public interface ObstaclesImageService {
      * @author zhangjianchuang@kanzhun.com
      * @date 2021/11/9 10:44 上午
      */
-    void send();
+    String send();
 }

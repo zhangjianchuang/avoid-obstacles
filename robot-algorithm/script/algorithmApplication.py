@@ -13,7 +13,7 @@ searcher = ObstacleSearcher(templateUrl)
 @route('/search/<image>')
 def index(image):
     if searcher.search("tmp/" + image):
-        return "l"
+        return "t"
     return "r"
 
 
