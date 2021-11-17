@@ -14,7 +14,7 @@ searcher = ObstacleSearcher(templateUrl)
 def index(image):
     if searcher.search("tmp/" + image):
         return "t"
-    return "r"
+    return "s"
 
 
 run(host='localhost', port=20003)
