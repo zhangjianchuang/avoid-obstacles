@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="robot-api" />
+        <module name="robot-image" />
+        <module name="robot-algorithm" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="avoid-obstacles" target="1.8" />
+      <module name="robot-algorithm" target="1.8" />
+      <module name="robot-api" target="1.8" />
+      <module name="robot-image" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="robot-algorithm" options="-parameters -sourcepath src/main/java" />
+      <module name="robot-api" options="-parameters -sourcepath src/main/java" />
+      <module name="robot-image" options="-parameters -sourcepath src/main/java" />
+    </option>
+  </component>
+</project>

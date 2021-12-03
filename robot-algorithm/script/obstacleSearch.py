@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # !/usr/bin/env python
+import glob
 import os
 
 import cv2
@@ -20,7 +21,7 @@ class ObstacleSearcher:
 
         w, h = self.template.shape[::-1]
         res = cv2.matchTemplate(img_gray, self.template, cv2.TM_CCOEFF_NORMED)
-        threshold = 0.63
+        threshold = 0.629
         loc = np.where(res >= threshold)
         for pt in zip(*loc[::-1]):
             # 标记实物
@@ -31,8 +32,9 @@ class ObstacleSearcher:
         # cv2.waitKey(0)
         return False
 
+
 # test
-# searcher = ObstacleSearcher("../../robot-image/obstacle-img/example.png")
-# images = glob.glob("../../robot-image/obstacle-img/*")
+# searcher = ObstacleSearcher("img-template/template.png")
+# images = glob.glob("tmp/*")
 # for name in images:
 #     searcher.search(name)
