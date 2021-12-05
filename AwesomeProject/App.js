@@ -6,23 +6,25 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import type {Node} from 'react';
 import {
+  Alert,
+  TouchableOpacity,
   Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  Alert,
+  TouchableHighlight,
   useColorScheme,
   View,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -49,13 +51,69 @@ const Section = ({children, title}): Node => {
   );
 };
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  const [images, setimages] = useState([]);
 
+  fetch('http://192.168.0.103:20003/images')
+    .then(res => res.json())
+    .then(data => {
+      if (images.length === 0) {
+        console.log(data.files);
+        setimages(data.files);
+      }
+    })
+    .catch(error => {
+      return {error_code: -3, error_msg: '请求异常，请重试'};
+    });
+  //打开相机
+  const _launchCamera = () => {
+    //配置选项
+    const options = {
+      cameraType: 'front', //前置摄像头
+      mediaType: 'photo', //进行拍照
+    };
+
+    //回调数据
+    launchCamera(options, response => {
+      uploadImage(response.uri);
+    });
+  };
+
+  //打开图库
+  const _launchImageLibrary = () => {
+    //配置选项
+    const options = {mediaType: 'photo'};
+
+    //回调数据
+    launchImageLibrary(options, response => {
+      uploadImage(response.uri);
+    });
+  };
+  const uploadImage = params => {
+    console.log('uploading.....');
+    var filename = params.substring(params.lastIndexOf('/') + 1);
+    RNFetchBlob.fetch(
+      'POST',
+      'http://192.168.0.103:20003/upload',
+      {
+        'Content-Type': 'multipart/form-data',
+      },
+      [
+        {
+          name: 'avatar-foo',
+          type: 'image/jpg',
+          filename: filename,
+          data: RNFetchBlob.wrap(params),
+        },
+      ],
+    ).then(res => {
+      setimages([]);
+    });
+  };
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -82,145 +140,34 @@ const App: () => Node = () => {
           </View>
 
           <View style={styles.parentContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/1.jpeg')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/1.jpeg'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/2.jpeg')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/2.jpeg'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/3.jpeg')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/3.jpeg'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/4.jpeg')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/4.jpeg'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/5.jpeg')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/5.jpeg'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/6.jpeg')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/6.jpeg'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/7.png')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/7.png'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/8.png')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/8.png'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/9.png')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/9.png'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                fetch('http://192.168.0.103:20003/search/10.png')
-                  .then(response => response.json())
-                  .then(output => {
-                    Alert.alert(output.result);
-                  });
-              }}>
-              <Image
-                source={{uri: 'http://192.168.0.103:20003/static/10.png'}}
-                style={styles.imageSize}
-              />
-            </TouchableOpacity>
+            {images.map((info, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    fetch('http://192.168.0.103:20003/search/' + info)
+                      .then(response => response.json())
+                      .then(output => {
+                        Alert.alert(output.result);
+                      });
+                  }}>
+                  <Image
+                    source={{
+                      uri: 'http://192.168.0.103:20003/static/' + info,
+                    }}
+                    style={styles.imageSize}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+          <View style={styles.container}>
+            <TouchableHighlight onPress={_launchCamera.bind(this)}>
+              <Text style={styles.buttonStyle}>打开相机</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={_launchImageLibrary.bind(this)}>
+              <Text style={styles.buttonStyle}>打开图库</Text>
+            </TouchableHighlight>
           </View>
         </View>
       </ScrollView>
@@ -264,6 +211,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flex: 4,
     flexDirection: 'row',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  buttonStyle: {
+    color: 'red',
+    marginTop: 30,
+    fontSize: 30,
   },
 });
 

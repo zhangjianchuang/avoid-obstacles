@@ -34,7 +34,7 @@ class ObstacleSearcher:
 
 
 # test
-# searcher = ObstacleSearcher("img-template/template.png")
+# searcher = ObstacleSearcher("img-template/template.1.png")
 # images = glob.glob("tmp/*")
 # for name in images:
 #     searcher.search(name)
