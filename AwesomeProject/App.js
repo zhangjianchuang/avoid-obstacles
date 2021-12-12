@@ -163,10 +163,10 @@ const App = () => {
           </View>
           <View style={styles.container}>
             <TouchableHighlight onPress={_launchCamera.bind(this)}>
-              <Text style={styles.buttonStyle}>打开相机</Text>
+              <Text style={styles.buttonStyle}>Turn on the camera</Text>
             </TouchableHighlight>
             <TouchableHighlight onPress={_launchImageLibrary.bind(this)}>
-              <Text style={styles.buttonStyle}>打开图库</Text>
+              <Text style={styles.buttonStyle}>Open picture library</Text>
             </TouchableHighlight>
           </View>
         </View>
