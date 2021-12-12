@@ -1,0 +1,117 @@
+#!/bin/bash
+APP_KEY=robot-image
+APP_NAME=$APP_KEY-0.1.0
+APP_HOME=$(cd "$(dirname $0)"; pwd)
+APP_MAINCLASS=$APP_NAME.jar
+
+#java虚拟机启动参数
+JAVA_OPTS="-server
+-Dapp.key=$APP_KEY
+-Xmx2g
+-Xms2g
+-XX:-OmitStackTraceInFastThrow
+-XX:+UseConcMarkSweepGC
+-XX:SurvivorRatio=5
+-XX:CMSInitiatingOccupancyFraction=80"
+
+psid=0
+
+checkpid() {
+   javaps=`ps -ef |grep -v "grep" | grep $APP_MAINCLASS`
+
+   if [ -n "$javaps" ]; then
+      psid=`echo $javaps | awk '{print $2}'`
+   else
+      psid=0
+   fi
+}
+
+start() {
+   checkpid
+
+   if [ $psid -ne 0 ]; then
+      echo "================================"
+      echo "warn: $APP_MAINCLASS already started! (pid=$psid)"
+      echo "================================"
+   else
+      echo -n "Starting $APP_MAINCLASS ..."
+      nohup $JAVA_HOME/bin/java $JAVA_OPTS -jar $APP_HOME/$APP_MAINCLASS -Dprod --logging.config=$APP_HOME/config/logback-spring.xml > ./nohub.log  2>&1 &
+      checkpid
+      sleep 3
+      if [ $psid -ne 0 ]; then
+         echo "(pid=$psid) [OK]"
+      else
+         echo "[Failed]"
+      fi
+   fi
+}
+
+stop() {
+   checkpid
+   if [ $psid -ne 0 ]; then
+      echo -n "Stopping $APP_MAINCLASS ...(pid=$psid) "
+      kill $psid
+      sleep 1
+      if [ $? -eq 0 ]; then
+         echo "[STOP OK]"
+      else
+         echo "[STOP Failed]"
+      fi
+
+      checkpid
+      if [ $psid -ne 0 ]; then
+         stop
+      fi
+   else
+      echo "================================"
+      echo "warn: $APP_MAINCLASS is not running"
+      echo "================================"
+   fi
+}
+status() {
+   checkpid
+
+   if [ $psid -ne 0 ];  then
+      echo "$APP_MAINCLASS is running! (pid=$psid)"
+   else
+      echo "$APP_MAINCLASS is not running"
+   fi
+}
+
+info() {
+   echo "System Information:"
+   echo "****************************"
+   echo `head -n 1 /etc/issue`
+   echo `uname -a`
+   echo
+   echo "JAVA_HOME=$JAVA_HOME"
+   echo `$JAVA_HOME/bin/java -version`
+   echo
+   echo "APP_HOME=$APP_HOME"
+   echo "APP_MAINCLASS=$APP_MAINCLASS"
+   echo "****************************"
+}
+
+case "$1" in
+   'start')
+      start
+      ;;
+   'stop')
+     stop
+     ;;
+   'restart')
+     stop
+     sleep 1
+     start
+     ;;
+   'status')
+     status
+     ;;
+   'info')
+     info
+     ;;
+  *)
+     echo "Usage: $0 {start|stop|restart|status|info}"
+     exit 1
+esac
+exit 0
